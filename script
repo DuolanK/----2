@@ -1,29 +1,17 @@
--- Получаем необходимые объекты
-local coin = script.Parent -- монетка
-local score = 0 -- Начальный счет
+local player = game:GetService("Players")
+local coin = script.Parent -- Path to coin
 
--- Ссылка на счет (находим TextLabel в StarterGui)
-local gui = game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("ScreenGui")
-local scoreLabel = gui:WaitForChild("TextLabel")
+local used = false
 
--- Функция для обновления счета
-local function updateScore()
-    scoreLabel.Text = "Score: " .. score
+function giveCoin(part)
+	if part.Parent:FindFirstChild("Humanoid") == nil or used == true then
+		return
+	end
+	used = true
+	local player = player:GetPlayerFromCharacter(part.Parent)
+	player.leaderstats.Coins.Value = player.leaderstats.Coins.Value + 1
+	
+	coin:Destroy()
 end
 
--- Функция обработки касания
-coin.Touched:Connect(function(hit)
-    -- Проверяем, касался ли объект персонажа игрока
-    local character = hit.Parent
-    local player = game.Players:GetPlayerFromCharacter(character)
-    
-    -- Убедитесь, что это игрок, а не что-то другое
-    if player then
-        -- Увеличиваем счет
-        score = score + 1
-        -- Обновляем текст на экране
-        updateScore()
-        -- Удаляем монетку с экрана после того, как она собрана
-        coin:Destroy()
-    end
-end)
+coin.Touched:Connect(giveCoin)
