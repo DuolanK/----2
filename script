@@ -1,41 +1,16 @@
-local npc = script.Parent
-local humanoid = npc:FindFirstChildOfClass("Humanoid") -- Получаем Humanoid NPC
-local attackDistance = 20 -- Расстояние, на котором NPC будет атаковать
-local attackDamage = 10 -- Урон от атаки NPC
-local attackCooldown = 2 -- Время перезарядки атаки
+local chestLid = script.Parent -- Крышка сундука
+local clickDetector = chestLid:FindFirstChildOfClass("ClickDetector") -- ClickDetector
+local pivotPart = chestLid:FindFirstChild("Pivot") -- Пивотная деталь (если она есть)
+local rotationSpeed = 30 -- Скорость вращения крышки
+local rotationAngle = 90 -- Угол вращения за один клик (в градусах)
 
--- Функция для поиска ближайшего игрока
-function getNearestPlayer()
-    local nearestPlayer = nil
-    local shortestDistance = attackDistance
-    for _, player in pairs(game.Players:GetPlayers()) do
-        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            local playerDistance = (npc.HumanoidRootPart.Position - player.Character.HumanoidRootPart.Position).Magnitude
-            if playerDistance < shortestDistance then
-                nearestPlayer = player
-                shortestDistance = playerDistance
-            end
-        end
-    end
-    return nearestPlayer
+-- Если пивотная деталь не указана, используем центр объекта
+if not pivotPart then
+    pivotPart = chestLid
 end
 
--- Функция атаки NPC
-function attackPlayer(player)
-    if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
-        local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
-        if humanoid then
-            humanoid:TakeDamage(attackDamage)
-        end
-    end
-end
-
--- Основной цикл поведения NPC
-while true do
-    local player = getNearestPlayer() -- Ищем ближайшего игрока
-    if player then
-        -- Если игрок найден в радиусе, атакуем его
-        attackPlayer(player)
-    end
-    wait(attackCooldown) -- Ожидаем перед следующей атакой
-end
+-- Обработчик клика
+clickDetector.MouseClick:Connect(function(player)
+    -- Поворот крышки вокруг пивотной оси
+    chestLid.CFrame = CFrame.new(pivotPart.Position) * CFrame.Angles(0, math.rad(rotationAngle), 0) * CFrame.new(-pivotPart.Position)
+end)
