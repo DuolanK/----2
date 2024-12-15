@@ -1,13 +1,10 @@
 -- Получаем необходимые объекты
 local coin = script.Parent -- монетка
-local player = nil -- переменная для игрока, который собрал монетку
+local score = 0 -- Начальный счет
 
 -- Ссылка на счет (находим TextLabel в StarterGui)
 local gui = game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("ScreenGui")
 local scoreLabel = gui:WaitForChild("TextLabel")
-
--- Начальный счет
-local score = 0
 
 -- Функция для обновления счета
 local function updateScore()
@@ -19,7 +16,8 @@ coin.Touched:Connect(function(hit)
     -- Проверяем, касался ли объект персонажа игрока
     local character = hit.Parent
     local player = game.Players:GetPlayerFromCharacter(character)
-
+    
+    -- Убедитесь, что это игрок, а не что-то другое
     if player then
         -- Увеличиваем счет
         score = score + 1
