@@ -6,8 +6,16 @@ script.Parent.Touched:Connect(function(hit)
             script.Parent.Transparency = 1
             local player = game.Players:GetPlayerFromCharacter(hit.Parent)
 
-            -- Увеличиваем количество монет в leaderstats
-            player.leaderstats.Coins.Value = player.leaderstats.Coins.Value + 1
+            -- Создаём свойство для монет, если оно еще не существует
+            if not player:FindFirstChild("Coins") then
+                local coins = Instance.new("IntValue")
+                coins.Name = "Coins"
+                coins.Value = 0
+                coins.Parent = player
+            end
+
+            -- Увеличиваем количество монет
+            player.Coins.Value = player.Coins.Value + 1
 
             -- Обновляем счет в TextLabel
             local playerGui = player:WaitForChild("PlayerGui")
@@ -15,7 +23,7 @@ script.Parent.Touched:Connect(function(hit)
             local scoreLabel = screenGui:WaitForChild("TextLabel")
 
             -- Обновляем текст в TextLabel
-            scoreLabel.Text = "Coins: " .. player.leaderstats.Coins.Value
+            scoreLabel.Text = "Coins: " .. player.Coins.Value
 
             -- Воспроизводим звук
             script.Sound:Play()
@@ -30,15 +38,9 @@ end)
 
 
 
-game.Players.PlayerAdded:Connect(function(player)
-    -- Создаем папку leaderstats, если ее нет
-    local leaderstats = Instance.new("Folder")
-    leaderstats.Name = "leaderstats"
-    leaderstats.Parent = player
-    
-    -- Создаем переменную Coins и присваиваем начальное значение 0
+if not player:FindFirstChild("Coins") then
     local coins = Instance.new("IntValue")
     coins.Name = "Coins"
     coins.Value = 0
-    coins.Parent = leaderstats
-end)
+    coins.Parent = player
+end
