@@ -1,17 +1,31 @@
-local chestLid = script.Parent -- Крышка сундука
-local clickDetector = chestLid:FindFirstChildOfClass("ClickDetector") -- ClickDetector
-local pivotPart = chestLid:FindFirstChild("Pivot") -- Пивотная деталь
-local rotationSpeed = 30 -- Скорость вращения крышки
-local rotationAngle = 90 -- Угол вращения за один клик (в градусах)
+-- Получаем необходимые объекты
+local coin = script.Parent -- монетка
+local player = nil -- переменная для игрока, который собрал монетку
 
--- Если пивотная деталь не указана, используем центр объекта
-if not pivotPart then
-    pivotPart = chestLid
+-- Ссылка на счет (находим TextLabel в StarterGui)
+local gui = game.Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("ScreenGui")
+local scoreLabel = gui:WaitForChild("TextLabel")
+
+-- Начальный счет
+local score = 0
+
+-- Функция для обновления счета
+local function updateScore()
+    scoreLabel.Text = "Score: " .. score
 end
 
--- Обработчик клика
-clickDetector.MouseClick:Connect(function(player)
-    -- Поворот крышки вокруг пивотной оси (пивот остаётся на месте)
-    local offset = chestLid.Position - pivotPart.Position -- Смещение крышки от пивота
-    chestLid.CFrame = CFrame.new(pivotPart.Position) * CFrame.Angles(0, math.rad(rotationAngle), 0) * CFrame.new(offset)
+-- Функция обработки касания
+coin.Touched:Connect(function(hit)
+    -- Проверяем, касался ли объект персонажа игрока
+    local character = hit.Parent
+    local player = game.Players:GetPlayerFromCharacter(character)
+
+    if player then
+        -- Увеличиваем счет
+        score = score + 1
+        -- Обновляем текст на экране
+        updateScore()
+        -- Удаляем монетку с экрана после того, как она собрана
+        coin:Destroy()
+    end
 end)
