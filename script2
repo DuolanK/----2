@@ -1,0 +1,31 @@
+local player = game.Players.LocalPlayer
+local camera = game.Workspace.CurrentCamera
+local menuFrame = script.Parent:WaitForChild("ScreenGui"):WaitForChild("Frame")
+local startButton = menuFrame:WaitForChild("StartButton")
+
+-- Начальная позиция камеры (вид сверху)
+local topViewPosition = Vector3.new(0, 100, 0)  -- Задайте координаты, подходящие для вашей карты
+local spawnPoint = player.CharacterAdded:Wait():WaitForChild("HumanoidRootPart").Position  -- Спавн игрока
+
+-- Установить камеру в положение сверху
+camera.CFrame = CFrame.new(topViewPosition, Vector3.new(0, 0, 0))  -- Камера направлена на центр карты
+
+-- Функция для скрытия меню и перемещения камеры к спауну
+local function startGame()
+    menuFrame.Visible = false  -- Скрываем меню
+    -- Перемещаем камеру к спауну игрока
+    local spawnTweenInfo = TweenInfo.new(2, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+    local spawnTweenGoal = {CFrame = CFrame.new(spawnPoint + Vector3.new(0, 5, 0))}  -- Камера будет немного выше спауна
+    local tweenService = game:GetService("TweenService")
+    local spawnTween = tweenService:Create(camera, spawnTweenInfo, spawnTweenGoal)
+    
+    spawnTween:Play()
+    
+    -- Ждем окончания анимации и затем перемещаем игрока к спауну
+    spawnTween.Completed:Connect(function()
+        player.Character:MoveTo(spawnPoint)  -- Перемещаем игрока к спауну
+    end)
+end
+
+-- Обработчик кнопки для начала игры
+startButton.MouseButton1Click:Connect(startGame)
