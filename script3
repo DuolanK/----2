@@ -1,12 +1,25 @@
 
--- Получаем персонажа
-local character = game.Workspace.NPC -- Замените "NPC" на имя вашего NPC
-local humanoid = character:WaitForChild("Humanoid")
+-- Замените PUT_ID_HERE на реальный ID вашей анимации
+local animationId = "rbxassetid://PUT_ID_HERE"
 
--- Создаем анимацию
-local animation = Instance.new("Animation")
-animation.AnimationId = "rbxassetid://1234567890"  -- Здесь указываем ID вашей анимации
+-- Найдем Humanoid или AnimationController NPC
+local npc = game.Workspace.NPC -- Путь к вашему NPC
+local humanoid = npc:FindFirstChildOfClass("Humanoid") -- Если у NPC есть Humanoid
 
--- Воспроизводим анимацию
-local animator = humanoid:WaitForChild("Animator")
-animator:PlayAnimation(animation)
+-- Если у NPC нет Humanoid, попробуйте использовать AnimationController
+if not humanoid then
+    local animationController = npc:FindFirstChildOfClass("AnimationController") -- Если есть AnimationController
+    if animationController then
+        -- Загружаем анимацию для AnimationController
+        local anim = Instance.new("Animation")
+        anim.AnimationId = animationId
+        animationController:LoadAnimation(anim):Play()
+    else
+        warn("Нет ни Humanoid, ни AnimationController!")
+    end
+else
+    -- Если у NPC есть Humanoid, используем его
+    local anim = Instance.new("Animation")
+    anim.AnimationId = animationId
+    humanoid:LoadAnimation(anim):Play()
+end
