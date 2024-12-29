@@ -1,0 +1,12 @@
+
+-- Получаем персонажа
+local character = game.Workspace.NPC -- Замените "NPC" на имя вашего NPC
+local humanoid = character:WaitForChild("Humanoid")
+
+-- Создаем анимацию
+local animation = Instance.new("Animation")
+animation.AnimationId = "rbxassetid://1234567890"  -- Здесь указываем ID вашей анимации
+
+-- Воспроизводим анимацию
+local animator = humanoid:WaitForChild("Animator")
+animator:PlayAnimation(animation)
