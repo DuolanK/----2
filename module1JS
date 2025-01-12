@@ -53,8 +53,7 @@ Copy code
 
 
 1. Переменные и типы данных
-javascript
-Copy code
+
 const name = prompt("Введите ваше имя:");
 const age = prompt("Введите ваш возраст:");
 const city = prompt("Введите ваш город:");
@@ -75,9 +74,10 @@ favorites.shift();
 // Вывод длины массива
 console.log("Новый массив:", favorites);
 console.log("Длина массива:", favorites.length);
+
+
 3. Условия
-javascript
-Copy code
+
 const number = parseInt(prompt("Введите число:"));
 
 if (number > 10) {
@@ -88,14 +88,13 @@ if (number > 10) {
     console.log("Число равно 10");
 }
 4. Циклы
-javascript
-Copy code
+
 const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 // Вывод квадратов всех чисел
 console.log("Квадраты чисел:");
 for (let i = 0; i < numbers.length; i++) {
-    console.log(`${numbers[i]}^2 = ${numbers[i] ** 2}`);
+    console.log(`${numbers[i]} в квадрате = ${numbers[i] ** 2}`);
 }
 
 // Подсчёт суммы
@@ -105,8 +104,7 @@ for (let num of numbers) {
 }
 console.log("Сумма чисел:", sum);
 5. Объекты
-javascript
-Copy code
+
 const student = {
     name: "Алексей",
     age: 20,
@@ -120,8 +118,6 @@ const student = {
 // Вызов метода объекта
 student.introduce();
 6. Объединение: мини-приложение
-javascript
-Copy code
 const products = [
     { name: "яблоки", price: 50, quantity: 20 },
     { name: "хлеб", price: 30, quantity: 10 },
