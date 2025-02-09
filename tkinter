@@ -1,0 +1,73 @@
+import tkinter as tk
+from tkinter import messagebox
+import sqlite3
+import os
+
+def create_db():
+    if not os.path.exists("students.db"):
+        conn = sqlite3.connect("students.db")
+        cursor = conn.cursor()
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS students (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL
+        )
+        """)
+        conn.commit()
+        conn.close()
+
+def add_student():
+    student_name = entry_name.get()
+    if student_name:
+        conn = sqlite3.connect("students.db")
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO students (name) VALUES (?)", (student_name,))
+        conn.commit()
+        conn.close()
+        entry_name.delete(0, tk.END)
+        update_student_list()
+    else:
+        messagebox.showwarning("Внимание", "Имя студента не может быть пустым!")
+
+def delete_student():
+    try:
+        student_id = listbox.curselection()[0]
+        student_name = listbox.get(student_id)
+        conn = sqlite3.connect("students.db")
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM students WHERE name = ?", (student_name,))
+        conn.commit()
+        conn.close()
+        update_student_list()
+    except IndexError:
+        messagebox.showwarning("Внимание", "Выберите студента для удаления!")
+
+def update_student_list():
+    listbox.delete(0, tk.END)
+    conn = sqlite3.connect("students.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT name FROM students")
+    students = cursor.fetchall()
+    conn.close()
+    
+    for student in students:
+        listbox.insert(tk.END, student[0])
+
+root = tk.Tk()
+root.title("Список студентов")
+
+entry_name = tk.Entry(root, width=40)
+button_add = tk.Button(root, text="Добавить студента", command=add_student)
+button_delete = tk.Button(root, text="Удалить студента", command=delete_student)
+listbox = tk.Listbox(root, width=40, height=10)
+
+entry_name.grid(row=0, column=0, padx=10, pady=10)
+button_add.grid(row=0, column=1, padx=10, pady=10)
+button_delete.grid(row=1, column=1, padx=10, pady=10)
+listbox.grid(row=1, column=0, padx=10, pady=10)
+
+create_db()
+update_student_list()
+
+# Запуск главного цикла
+root.mainloop()
