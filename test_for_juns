@@ -1,0 +1,61 @@
+import random
+
+
+def ask_question(question, options, correct_answer):
+    print("\n" + question)
+    for i, option in enumerate(options, 1):
+        print(f"{i}. {option}")
+
+    while True:
+        try:
+            answer = int(input("Введите номер ответа: "))
+            if 1 <= answer <= len(options):
+                return options[answer - 1] == correct_answer
+            else:
+                print("Пожалуйста, введите число от 1 до", len(options))
+        except ValueError:
+            print("Введите корректное число.")
+
+
+questions = [
+    ("Какой оператор используется для вывода данных в Python?", ["print", "echo", "cout", "write"], "print"),
+    ("Как объявить переменную в Python?", ["var x = 5", "x = 5", "int x = 5", "let x = 5"], "x = 5"),
+    ("Какой тип данных у переменной x = 3.14?", ["int", "str", "float", "bool"], "float"),
+    ("Как объявить список в Python?", ["[]", "{}", "()", "<>"], "[]"),
+    ("Как проверить длину списка my_list?", ["size(my_list)", "len(my_list)", "my_list.length", "count(my_list)"],
+     "len(my_list)"),
+    ("Как добавить элемент в список my_list?",
+     ["my_list.add()", "my_list.append()", "my_list.push()", "my_list.insert()"], "my_list.append()"),
+    ("Какой оператор используется для проверки условия?", ["if", "for", "while", "switch"], "if"),
+    ("Как создать бесконечный цикл в Python?", ["while True", "for(;;)", "loop forever", "repeat"], "while True"),
+    ("Как импортировать модуль random?", ["include random", "import random", "require random", "use random"],
+     "import random"),
+    ("Как объявить функцию в Python?", ["def func():", "function func():", "void func()", "fn func()"], "def func():"),
+    ("Как вызвать функцию func?", ["call func", "func()", "invoke func", "run func"], "func()"),
+    ("Как получить пользовательский ввод?", ["read()", "input()", "scan()", "get()"], "input()"),
+    ("Как записать комментарий в коде?", ["// комментарий", "/* комментарий */", "# комментарий", "-- комментарий"],
+     "# комментарий"),
+    ("Какой метод используется для замены строки в Python?", ["replace()", "swap()", "change()", "modify()"],
+     "replace()"),
+    ("Какой логический оператор обозначает 'И'?", ["&&", "||", "and", "or"], "and"),
+    ("Какой логический оператор обозначает 'ИЛИ'?", ["&&", "||", "and", "or"], "or"),
+    ("Как преобразовать строку '123' в число?", ["int('123')", "str(123)", "float('123')", "toInt('123')"],
+     "int('123')"),
+    ("Как проверить, есть ли ключ 'name' в словаре d?",
+     ["'name' in d", "d.contains('name')", "d.has_key('name')", "'name' exists in d"], "'name' in d"),
+    ("Как удалить элемент из списка my_list?",
+     ["my_list.remove()", "del my_list[0]", "my_list.delete()", "my_list.pop()"], "my_list.pop()"),
+    ("Как вывести отладочную информацию?", ["debug()", "log()", "print()", "trace()"], "print()")
+]
+
+random.shuffle(questions)
+score = 0
+
+for question, options, correct_answer in questions[:20]:
+    if ask_question(question, options, correct_answer):
+        print("Верно!")
+        score += 1
+    else:
+        print("Неправильно. Правильный ответ:", correct_answer)
+
+print(f"\nВы ответили правильно на {score} из 20 вопросов.")
